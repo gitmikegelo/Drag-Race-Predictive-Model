@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 from graph import Graph
 from geolocator import GeoLocator
+import random
+from streamlit_autorefresh import st_autorefresh  # Import autorefresh
 
 st.set_page_config(layout="wide")  # Use full width
 
@@ -62,11 +64,11 @@ st.markdown(
     }
     /* Scrollable panel styling */
     .scrollable-box {
-        border: 2px solid #ff66a3;
+        border: 2px solid;
         border-radius: 10px;
         padding: 15px;
         width: 100%;
-        height: 300px;
+        height: 150px;
         overflow-y: scroll;
         background-color: #ffffff;
         color: #333;
@@ -84,15 +86,15 @@ left_col, right_col = st.columns([1.5, 1])
 with left_col:
     st.title("Data and Drag")
     st.subheader("RPDR Finals Probability Dashboard")
-    st.write('''Honey, welcome to the glitziest, most fabulous Dashboard of our recent queens and their chances of sashaying into the finals! 
-We’ve conjured up this dazzling calculation using an ensemble of high-heel-stomping machine learning models, trained on the fierce data of queens from Season 7 to Season 16. 
+    st.write('''Honey, welcome to the glitziest, most fabulous stats of our recent queens and their chances of sashaying into the finals! 
+I’ve conjured up this dazzling calculation using an ensemble of high-heel-stomping machine learning models, trained on the fierce data of queens from Season 7 to Season 16. 
 
 Get ready to see who’s serving looks and landing a spot in the finale—served up with a side of sparkle and sass!
          ''')
 
     data_queens = pd.read_csv('queen_probab.csv')
-    data_queens = data_queens.sort_values(by="Probability", ascending=False)
-    data_queens['Probability'] = data_queens['Probability'].apply(lambda x: f"{x * 100:.0f}%")
+    data_queens = data_queens.sort_values(by="Chance of getting to the finals", ascending=False)
+    data_queens['Chance of getting to the finals'] = data_queens['Chance of getting to the finals'].apply(lambda x: f"{x * 100:.0f}%")
 
     st.subheader("Season 17")
     html_table = data_queens.to_html(index=False)
@@ -110,6 +112,62 @@ Get ready to see who’s serving looks and landing a spot in the finale—served
 
 with right_col:
 
+    random_texts =  [
+    "RuPaul pitched the show in one meeting and sold it instantly, proving his star power from day one.",
+    "The first season aired in 2009 on Logo with a tiny budget, yet it still became a cult hit.",
+    "RuPaul takes six hours to transform into drag for each episode—talk about dedication!",
+    "Contestants are isolated during filming, with tape on hotel doors to catch rule-breakers.",
+    "Willam Belli was disqualified in Season 4 for sneaking her husband into her room—a rare ejection!",
+    "Shangela’s 'Halleloo' catchphrase came from her church background, blending faith and fabulosity.",
+    "Bebe Zahara Benet, the first winner, hid her victory from her family until it aired.",
+    "Tyra Sanchez won Season 2 at just 21, tying with Aquaria as the youngest champ ever.",
+    "Phi Phi O’Hara missed All Stars 1 due to an arrest but made a fierce comeback later.",
+    "The queens get iPods with all lip-sync songs, prepping them for battle like musical gladiators.",
+    "Roxxxy Andrews’ wig reveal in Season 5’s 'Whip My Hair' lip-sync left everyone gagged—and crying.",
+    "Jinkx Monsoon won Season 5 despite battling narcolepsy, napping between takes.",
+    "Contestants don’t know who else is competing until they walk into the Werk Room.",
+    "Sasha Velour’s rose-petal reveal in the Season 9 finale was inspired by her theater roots.",
+    "Adore Delano quit All Stars 2 mid-season, the first queen to sashay away voluntarily.",
+    "BenDeLaCreme followed suit in All Stars 3, leaving after dominating the competition.",
+    "Multiple finale endings are filmed to keep the winner a secret—even from the queens!",
+    "Aquaria cried backstage with her rivals when she won Season 10, a tearful sisterhood moment.",
+    "Trinity The Tuck holds the record for most lip-syncs—nine times across her seasons!",
+    "Latrice Royale’s laugh is so iconic, fans call it a 'healing sound' online.",
+    "Alaska’s 'Hiiiiii' entrance in All Stars 2 was improvised after a last-minute rewrite.",
+    "The pit crew’s Bryce Eilenberg is an aerospace engineer by day—beauty and brains!",
+    "Mimi Imfurst became the first U.S. drag queen to perform in Cuba in 2016.",
+    "Trixie Mattel bombed Snatch Game but still won All Stars 3, defying the odds.",
+    "The Season 9 premiere drew 987,000 viewers, the show’s biggest debut ever.",
+    "RuPaul’s mantra, 'If you can’t love yourself…,' came from his mom’s life lessons.",
+    "Lady Gaga gave extra critiques off-camera during her Season 9 guest spot.",
+    "Violet Chachki never lip-synced for her life in Season 7, a rare perfect run.",
+    "Sharon Needles lived on bread and ranch during Season 4 due to no veggie options.",
+    "Monét X Change is the only winner to also snag Miss Congeniality (Season 10).",
+    "Detox helped Jinkx with makeup tips mid-season—fierce competition, fiercer friendship.",
+    "The 'reading' mini-challenge stems from drag’s underground 'shade' culture.",
+    "Carmen Carrera lip-synced three times in Season 3 and never sent anyone home.",
+    "Tatianna lied about her age for Season 2—she was just 19, the youngest ever.",
+    "Willam stole props like shoes and fans from the set, living her rebel truth.",
+    "Season 1’s filter was so heavy, fans call it the 'Vaseline lens' era.",
+    "Bianca Del Rio’s win streak in Season 6 made her a legend—no bottom placements!",
+    "Asia O’Hara’s butterfly fiasco in the Season 10 finale was a live-animal first.",
+    "RuPaul’s 11 Emmys make him the most-awarded Black artist in Primetime history.",
+    "The Vixen’s 'I’m here to fight' entrance took multiple takes due to nerves.",
+    "Queens can’t use phones or open hotel blinds, keeping them in a drag bubble.",
+    "Bob The Drag Queen won Season 8 with comedy chops honed in NYC clubs.",
+    "Shangela competed on three seasons, a record for resilience and redemption.",
+    "Peppermint was the first openly trans contestant to compete (Season 9).",
+    "RuPaul’s wig budget per season tops $50,000—serving looks isn’t cheap!",
+    "The Werk Room has no clocks, disorienting queens for drama’s sake.",
+    "Alyssa Edwards’ tongue pop was born from a childhood speech habit.",
+    "Symone’s win in Season 13 came after she almost quit drag pre-show.",
+    "The show’s moved from Logo to VH1 to MTV, chasing bigger audiences each time.",
+    "RuPaul once said Roxxxy’s bus-stop abandonment story is his favorite moment—raw and real."
+]
+
+
+    
+
     st.markdown("""
 ### Development of the Predictive Model, Hunty: Serving Stats with Drag Realness
 
@@ -120,8 +178,8 @@ Alright, dolls, let’s spill the tea on how this predictive model came to sasha
 Our dataset is a fabulous lineup of 139 queens, spanning from the high-fashion eleganza of Season 7 to the gag-worthy moments of Season 16. We’ve got the stats that matter, honey:
 
 - **Number of Episodes:** How long these dolls stayed in the game before they had to sashay away.
-- **Wins and Bottoms Per Episode:** We took the total number of WINS (those “Condragulations, you’re a winner, baby!” moments) and BOTTOMS (the “Lip sync for your life, gurl” close calls), then divided that by the total episodes in their season. It’s the T on their track record, serving consistency or chaos.
-- **Category Scores:** We rated these queens on a scale of “meh” to “mother-tucking iconic” across four gag-worthy domains:
+- **Wins and Bottoms Per Episode:** I took the total number of WINS (those “Condragulations, you’re a winner, baby!” moments) and BOTTOMS (the “Lip sync for your life, gurl” close calls), then divided that by the total episodes in their season. It’s the T on their track record, serving consistency or chaos.
+- **Category Scores:** I rated these queens on a scale of “meh” to “mother-tucking iconic” across four gag-worthy domains:
   - *Fashion Runway:* Are they serving high couture or Party City clearance rack?
   - *Comedy:* Can they make Ru cackle or are they bombing harder than a shady reading challenge?
   - *Performance:* Do they own the stage like a main challenge queen or fade into the backdrop?
@@ -130,7 +188,7 @@ Our dataset is a fabulous lineup of 139 queens, spanning from the high-fashion e
 
 #### The Model: Werking the Numbers Like a Lip Sync Assassin
 
-Now, let’s talk about the techy realness, because this ain’t no basic kiki. I threw every trick in the book at this predictive gig—think of it like a maxi challenge with extra glitter. We tested a whole lineup of models, gurls:
+Now, let’s talk about the techy realness, because this ain’t no basic kiki. I threw every trick in the book at this predictive gig—think of it like a maxi challenge with extra glitter. I tested a whole lineup of models, gurls:
 
 - *Random Forest:* For that deep, leafy decision-making realness.
 - *SVM (Support Vector Machine):* Cutting through the noise like a sharp stiletto.
@@ -142,11 +200,29 @@ I didn’t just stop there, oh no—I turned it into a full-on grid search extra
 #### The Prediction Results: Reading the Current Season’s House Down
 
 So, what’s the tea on the dashboard? It’s serving up predictions for the queens of the current season—Season 17, airing as of this glorious moment on February 26, 2025—using that trained ensemble model. We’re taking all that juicy data from Seasons 7 to 16, mixing it with the fresh beats of the new season, and letting the model spill the T: who’s got the charisma, uniqueness, nerve, and talent to snatch the crown? It’s like a crystal ball for drag superstardom, but with better makeup and no foggy vibes.
+                
+You can view the process of training on this notebook:
 
 """)
 
-    
-    
+    st.markdown('<a href="https://colab.research.google.com/drive/1oPAozKFHZBmgc1_lbseC2Etw-qr5zfqz?usp=sharing" target="_blank">Rupaul Drag Race Predicting Model</a>', unsafe_allow_html=True)
+
+    st.markdown("If you want the dataset, comment, or would like to volunteer for data verification, you can send an email to draganddata1@gmail.com")
 
     # Display scrollable panel
+    # Automatically refresh the quote every 15 seconds
+    st_autorefresh(interval=10000, key="quote_refresh")
     
+    # Each refresh picks a new random quote
+    selected_text = random.choice(random_texts)
+
+    # Display scrollable panel with the dynamic quote
+    st.markdown(
+        f"""
+        <div class="scrollable-box">
+            <h3 style="text-align: center;">Random Drag Race Quote</h3>
+            <p style="text-align: center; font-size: 18px;"><i>{selected_text}</i></p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
